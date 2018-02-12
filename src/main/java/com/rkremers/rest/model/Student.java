@@ -11,6 +11,13 @@ import javax.persistence.Table;
 
 import org.springframework.hateoas.ResourceSupport;
 
+/**
+ * Note:
+ * To implement HATEOAS, we would need to include related resources in the response.
+ * 
+ * @author LTAdmin
+ *
+ */
 @Entity
 @Table(name="student")
 public class Student extends ResourceSupport implements Serializable {

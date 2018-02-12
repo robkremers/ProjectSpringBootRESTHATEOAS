@@ -102,7 +102,7 @@ GET http://localhost:1024/students/1
 
 POST http://localhost:1024/students/
 
-Body (JSON (application/json):
+Body (JSON (application/json) ):
 {
     "firstName": "Frank",
     "lastName": "Reijden",
@@ -110,3 +110,16 @@ Body (JSON (application/json):
     "age": 40
 }
 (Test: after GET http://localhost:1024/students the new student will be visible).
+
+PUT http://localhost:1024/students/
+
+Body (JSON (application/json));
+
+    {
+        "studentId": 4,
+        "firstName": "Frank",
+        "lastName": "Reijden",
+        "passportNumber": "test4567Updated",
+        "age": 40
+    }
+
