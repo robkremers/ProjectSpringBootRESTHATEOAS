@@ -25,4 +25,20 @@ git:
   515  git status
   516  history
 
-  
+Sources:
+- https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/
+- https://docs.spring.io/spring-framework/docs/current/javadoc-api/index.html
+- https://docs.spring.io/spring-boot/docs/1.5.10.RELEASE/api/index.html
+- https://docs.spring.io/spring-hateoas/docs/current/api/index.html
+- https://docs.spring.io/spring-hateoas/docs/current/reference/html/
+- https://docs.spring.io/spring-data/jpa/docs/current/api/index.html
+- https://dzone.com/articles/applying-hateoas-to-a-rest-api-with-spring-boot
+- https://courses.in28minutes.com/p/spring-boot-for-beginners-in-10-steps
+
+- http://www.springboottutorial.com/spring-boot-crud-rest-service-with-jpa-hibernate
+- https://dzone.com/articles/spring-boot-hateoas-for-restful-services
+- http://www.baeldung.com/spring-hateoas-tutorial
+- Een entiteit extenden voor ResourceSupport.
+- https://dzone.com/articles/applying-hateoas-to-a-rest-api-with-spring-boot
+	
+	
