@@ -41,4 +41,72 @@ Sources:
 - Een entiteit extenden voor ResourceSupport.
 - https://dzone.com/articles/applying-hateoas-to-a-rest-api-with-spring-boot
 	
-	
+---------------------------------------------------------------------------------------------------
+Execution:
+
+H2 database:
+- http://localhost:1024/student_db
+	- Ensure that: JDBC URL: jdbc:h2:mem:student_db !!!
+	- Username: sa
+	- Password: <none>
+- With the current setup the following should be visible:
+	- Table STUDENT
+	- in the SQL window:
+		> select * from student; <ctrl-enter>
+
+ID  	AGE  	FIRST_NAME  	LAST_NAME  		PASSPORT_NUMBER  
+1			55		Rob						Kremers				abc123
+2			30		Martijn				Salm van der	blabla44421
+3			30		Dennis				Geurts				A4D9I08JE
+
+Consuming the RESTful application:
+GET http://localhost:1024/students
+- Note that due to the fact that Student extends ResourceSupport each element will automatically contain "links" although nothing has as yet been added.
+
+[
+    {
+        "studentId": 1,
+        "firstName": "Rob",
+        "lastName": "Kremers",
+        "passportNumber": "abc123",
+        "age": 55,
+        "links": []
+    },
+    {
+        "studentId": 2,
+        "firstName": "Martijn",
+        "lastName": "Salm van der",
+        "passportNumber": "blabla44421",
+        "age": 30,
+        "links": []
+    },
+    {
+        "studentId": 3,
+        "firstName": "Dennis",
+        "lastName": "Geurts",
+        "passportNumber": "A4D9I08JE",
+        "age": 30,
+        "links": []
+    }
+]
+		
+GET http://localhost:1024/students/1
+
+{
+    "studentId": 1,
+    "firstName": "Rob",
+    "lastName": "Kremers",
+    "passportNumber": "abc123",
+    "age": 55
+}
+
+POST http://localhost:1024/students/
+
+Body (JSON (application/json):
+{
+    "firstName": "Frank",
+    "lastName": "Reijden",
+    "passportNumber": "test4567",
+    "age": 40
+}
+(Test: after GET http://localhost:1024/students the new student will be visible).
