@@ -26,6 +26,8 @@ git:
   516  history
 
 Sources:
+
+API:
 - https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/
 - https://docs.spring.io/spring-framework/docs/current/javadoc-api/index.html
 - https://docs.spring.io/spring-boot/docs/1.5.10.RELEASE/api/index.html
@@ -41,8 +43,18 @@ Sources:
 - Een entiteit extenden voor ResourceSupport.
 - https://dzone.com/articles/applying-hateoas-to-a-rest-api-with-spring-boot
 
+Logging:
 - https://www.quickprogrammingtips.com/spring-boot/using-log4j2-with-spring-boot.html
 	
+JUnit:
+- https://junit.org
+- https://junit.org/junit5/docs/current/user-guide/
+- https://junit.org/junit5/docs/current/api/
+- https://junit.org/junit4/javadoc/4.10/
+- https://www.tutorialspoint.com/junit/index.htm
+
+
+
 ---------------------------------------------------------------------------------------------------
 Execution:
 
@@ -186,3 +198,19 @@ Response:
         }
     }
 }
+
+---------------------------------------------------------------------------------------------------
+2018-02-13:
+
+Study and implementation of unit testing.
+- General use of JUnit.
+- Testing in Spring Boot.
+
+- For production and testing use separate databases.
+
+Sources under study:
+- https://junit.org/junit5/docs/current/user-guide/
+- http://www.baeldung.com/spring-data-jpa-multiple-databases
+- https://www.youtube.com/watch?v=ixIxXRoCr5w
+
+- 
