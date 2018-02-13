@@ -117,17 +117,19 @@ public class StudentController {
 	 * @return
 	 */
 	@PutMapping
-	public ResponseEntity<Object> updateStudent(@RequestBody Student student) {
+	public Student updateStudent(@RequestBody Student student) {
 
 		System.out.println("Student id: " + student.getStudentId());
 		Optional<Student> updateStudent = studentRepository.findByStudentId(student.getStudentId());
 
 		if (!updateStudent.isPresent())
-			return ResponseEntity.notFound().build();
+			throw new StudentNotFoundException("A student with id " + student.getStudentId() + " has not been found.");
 		
-		studentRepository.save(student);
+		studentRepository.save(updateStudent.get());
+		updateStudent.get().add( linkTo(this.getClass()).slash(updateStudent.get().getStudentId()).withSelfRel() );
+		updateStudent.get().add( linkTo(this.getClass()).withRel("all_students") );
 
-		return ResponseEntity.noContent().build();
+		return updateStudent.get();
 	}
 	
 }

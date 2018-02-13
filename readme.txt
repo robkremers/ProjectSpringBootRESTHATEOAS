@@ -169,3 +169,20 @@ Body (JSON (application/json));
         "age": 40
     }
 
+Response:
+
+{
+    "studentId": 4,
+    "firstName": "Frank",
+    "lastName": "Reijden",
+    "passportNumber": "test4567",
+    "age": 40,
+    "_links": {
+        "self": {
+            "href": "http://localhost:1024/students/4"
+        },
+        "all_students": {
+            "href": "http://localhost:1024/students"
+        }
+    }
+}
