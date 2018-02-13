@@ -11,7 +11,7 @@ import com.rkremers.rest.repository.StudentRepository;
 
 /**
  * Note:
- * SpringBootApplication is a convenience annotation that adds all of the following:
+ * @SpringBootApplication is a convenience annotation that adds all of the following:
  * @Configuration tags the class as a source of bean definitions for the application context.
  * @EnableAutoConfiguration tells Spring Boot to start adding beans based on classpath settings, other beans, and various property settings.
  * Normally you would add @EnableWebMvc for a Spring MVC app, but Spring Boot adds it automatically when it sees spring-webmvc on the classpath. 

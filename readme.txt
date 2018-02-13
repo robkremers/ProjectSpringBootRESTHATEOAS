@@ -40,6 +40,8 @@ Sources:
 - http://www.baeldung.com/spring-hateoas-tutorial
 - Een entiteit extenden voor ResourceSupport.
 - https://dzone.com/articles/applying-hateoas-to-a-rest-api-with-spring-boot
+
+- https://www.quickprogrammingtips.com/spring-boot/using-log4j2-with-spring-boot.html
 	
 ---------------------------------------------------------------------------------------------------
 Execution:
@@ -70,7 +72,16 @@ GET http://localhost:1024/students
         "lastName": "Kremers",
         "passportNumber": "abc123",
         "age": 55,
-        "links": []
+        "links": [
+            {
+                "rel": "self",
+                "href": "http://localhost:1024/students/1"
+            },
+            {
+                "rel": "all_students",
+                "href": "http://localhost:1024/students"
+            }
+        ]
     },
     {
         "studentId": 2,
@@ -78,7 +89,16 @@ GET http://localhost:1024/students
         "lastName": "Salm van der",
         "passportNumber": "blabla44421",
         "age": 30,
-        "links": []
+        "links": [
+            {
+                "rel": "self",
+                "href": "http://localhost:1024/students/2"
+            },
+            {
+                "rel": "all_students",
+                "href": "http://localhost:1024/students"
+            }
+        ]
     },
     {
         "studentId": 3,
@@ -86,7 +106,16 @@ GET http://localhost:1024/students
         "lastName": "Geurts",
         "passportNumber": "A4D9I08JE",
         "age": 30,
-        "links": []
+        "links": [
+            {
+                "rel": "self",
+                "href": "http://localhost:1024/students/3"
+            },
+            {
+                "rel": "all_students",
+                "href": "http://localhost:1024/students"
+            }
+        ]
     }
 ]
 		
@@ -102,13 +131,30 @@ GET http://localhost:1024/students/1
 
 POST http://localhost:1024/students/
 
-Body (JSON (application/json) ):
+Body (JSON (application/json); otherwise an exception will occur ):
 {
     "firstName": "Frank",
     "lastName": "Reijden",
     "passportNumber": "test4567",
     "age": 40
 }
+Response:
+{
+    "studentId": 4,
+    "firstName": "Frank",
+    "lastName": "Reijden",
+    "passportNumber": "test4567",
+    "age": 40,
+    "_links": {
+        "self": {
+            "href": "http://localhost:1024/students/4"
+        },
+        "all_students": {
+            "href": "http://localhost:1024/students"
+        }
+    }
+}
+
 (Test: after GET http://localhost:1024/students the new student will be visible).
 
 PUT http://localhost:1024/students/

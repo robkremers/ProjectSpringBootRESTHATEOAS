@@ -1,13 +1,16 @@
 package com.rkremers.rest.controller;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +32,8 @@ import com.rkremers.rest.repository.StudentRepository;
 @RequestMapping(value="/students")
 public class StudentController {
 	
+	private static final Logger LOG = LoggerFactory.getLogger(StudentController.class);
+	
 	@Autowired
 	private StudentRepository studentRepository;
 
@@ -38,7 +43,7 @@ public class StudentController {
 	@GetMapping
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<Student> getStudents() {
-		System.out.println("StudentController.getStudents()");
+		LOG.info("StudentController.getStudents()");
 		
 		List<Student> students = studentRepository.findAll();
 		
@@ -62,8 +67,13 @@ public class StudentController {
 	
 	@GetMapping("/{studentId}")
 	public Student retrieveStudent(@PathVariable long studentId) {
-		System.out.println("StudentController.retrieveStudent()");
+
+		LOG.info("StudentController.retrieveStudent(): studentId = " + studentId);
+
 		Optional<Student> student = studentRepository.findByStudentId(studentId);
+		
+		student.get().add( linkTo(this.getClass()).slash(student.get().getStudentId()).withSelfRel() );
+		student.get().add( linkTo(this.getClass()).withRel("all_students") );
 
 		if (!student.isPresent())
 			throw new StudentNotFoundException("A student with id " + studentId + " has not been found.");
@@ -76,30 +86,43 @@ public class StudentController {
 		
 // Just to show that it is possible to custom define a method. Spring will check that the defined method is consistent with the Student declaration.
 //		studentRepository.deleteByStudentId(studentId);
+// And the method provided via JpaRepository<Student, Long>.
 		studentRepository.delete(studentId);
 	}
 
+	/**
+	 * After saving the object the new content is returned with Status 201 Created.
+	 * 
+	 * @param student
+	 * @return
+	 */
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public ResponseEntity<Object> createStudent(@RequestBody Student student) {
+	public Student createStudent(@RequestBody Student student) {
 		Student savedStudent = studentRepository.save(student);
+		
+		savedStudent.add( linkTo(this.getClass()).slash(savedStudent.getStudentId()).withSelfRel() );
+		savedStudent.add( linkTo(this.getClass()).withRel("all_students") );
 
-		URI location = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{studentId}")
-				.buildAndExpand(savedStudent.getId()).toUri();
-
-		return ResponseEntity.created(location).build();
+		return savedStudent;
 
 	}
 	
+	/**
+	 * Note:
+	 * It is a business choice whether an object, that can not be found in the database will be saved or not.
+	 * In this case the decision is not to save the object, but to return a message: Status 404 Not Found.
+	 * 
+	 * @param student
+	 * @return
+	 */
 	@PutMapping
 	public ResponseEntity<Object> updateStudent(@RequestBody Student student) {
 
 		System.out.println("Student id: " + student.getStudentId());
-		Optional<Student> studentOptional = studentRepository.findByStudentId(student.getStudentId());
+		Optional<Student> updateStudent = studentRepository.findByStudentId(student.getStudentId());
 
-		if (!studentOptional.isPresent())
+		if (!updateStudent.isPresent())
 			return ResponseEntity.notFound().build();
 		
 		studentRepository.save(student);
