@@ -1,5 +1,8 @@
 package com.rkremers.rest;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,16 +17,36 @@ import com.rkremers.rest.controller.StudentController;
 @SpringBootTest
 public class ProjectSpringBootResthateoasApplicationTests {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(StudentController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ProjectSpringBootResthateoasApplicationTests.class);
 
 	@BeforeClass
 	public static void beforeAll() {
-		LOG.info("ProjectSpringBootResthateoasApplicationTests: beforeAll()");
+		LOG.info("ProjectSpringBootResthateoasApplicationTests: Execution before class");
+	}
+	
+	@AfterClass
+	public static void afterClass() {
+		LOG.info("ProjectSpringBootResthateoasApplicationTests: Execution after class");
+	}
+	
+	@Before
+	public void before() {
+		LOG.info("ProjectSpringBootResthateoasApplicationTests: Execution before test method");
+	}
+	
+	@After
+	public void after() {
+		LOG.info("ProjectSpringBootResthateoasApplicationTests: Execution after test method");
 	}
 	
 	@Test
-	public void contextLoads() {
-		LOG.info("ProjectSpringBootResthateoasApplicationTests: contextLoads()");
+	public void testMethod1() {
+		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 1.");
 	}
+	
+	@Test
+	public void testMethod2() {
+		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 2.");
+	}	
 
 }
