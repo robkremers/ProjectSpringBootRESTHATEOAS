@@ -4,14 +4,13 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import com.rkremers.rest.controller.StudentController;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,7 +38,7 @@ public class ProjectSpringBootResthateoasApplicationTests {
 		LOG.info("ProjectSpringBootResthateoasApplicationTests: Execution after test method");
 	}
 	
-	@Test
+	@Test(timeout=1000)
 	public void testMethod1() {
 		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 1.");
 	}
@@ -48,5 +47,26 @@ public class ProjectSpringBootResthateoasApplicationTests {
 	public void testMethod2() {
 		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 2.");
 	}	
-
+	
+	@Ignore
+	@Test
+	public void testMethod3() {
+		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 3.");
+	}
+	
+	/**
+	 * Note:
+	 * The following test will throw an ArithmeticException.
+	 * However: the test will not crash. 
+	 * Due to informing which Exception is to be expected JUnit will handle the exception.
+	 * Ensure that in case of testing on e.g. a custom Exception the logging in advance is clear on what will be tested.
+	 * 
+	 */
+	@Test(expected=ArithmeticException.class)
+	public void testMethod4() {
+		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 4: Check on ArithmeticException.");
+		int result = 1 / 0;
+		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 4: Check on ArithmeticException finished.");
+		
+	}	
 }
