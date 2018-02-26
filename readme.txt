@@ -213,4 +213,15 @@ Sources under study:
 - http://www.baeldung.com/spring-data-jpa-multiple-databases
 - https://www.youtube.com/watch?v=ixIxXRoCr5w
 
-- 
+---------------------------------------------------------------------------------------------------
+2018-02-26:
+
+Implementation of the ORM: student <==> course.
+This does not yet work correctly.
+
+Test in the H2 database:
+	select * from student;
+	
+	select * from course;
+	
+	select * from student_course;

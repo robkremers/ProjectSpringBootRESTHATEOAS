@@ -1,12 +1,18 @@
 package com.rkremers.rest.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.springframework.hateoas.ResourceSupport;
@@ -35,6 +41,15 @@ public class Student extends ResourceSupport implements Serializable {
 	private String passportNumber;
 	@Column(nullable=false)
 	private int age;
+	
+	@ManyToMany
+	@JoinTable(name = "Student_Course"
+    , joinColumns=@JoinColumn(name = "STUDENT_ID")
+    , inverseJoinColumns = @JoinColumn(name = "COURSE_ID")
+    )
+	private Set<Course> courses = new HashSet<Course>();
+//	private List<Course> courses = new ArrayList<Course>();
+	
 	
 	public Student() {
 		
@@ -82,6 +97,14 @@ public class Student extends ResourceSupport implements Serializable {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+	public Set<Course> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Set<Course> courses) {
+		this.courses = courses;
 	}
 
 	@Override

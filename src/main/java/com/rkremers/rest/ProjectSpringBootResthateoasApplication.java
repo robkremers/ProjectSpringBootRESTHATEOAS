@@ -6,7 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Profile;
 
+import com.rkremers.rest.model.Course;
 import com.rkremers.rest.model.Student;
+import com.rkremers.rest.repository.CourseRepository;
 import com.rkremers.rest.repository.StudentRepository;
 
 /**
@@ -26,6 +28,9 @@ public class ProjectSpringBootResthateoasApplication implements CommandLineRunne
 	
 	@Autowired
 	private StudentRepository studentRepository;
+	
+	@Autowired
+	private CourseRepository courseRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectSpringBootResthateoasApplication.class, args);
@@ -36,10 +41,31 @@ public class ProjectSpringBootResthateoasApplication implements CommandLineRunne
 	 */
 	@Override
 	public void run(String... args) throws Exception {
-		studentRepository.save( new Student("Rob", "Kremers", "abc123", 55) );
-		studentRepository.save( new Student("Martijn", "Salm van der", "blabla44421", 30));
-		studentRepository.save( new Student("Dennis", "Geurts", "A4D9I08JE", 30));
 		
+		Student studentRob = new Student("Rob", "Kremers", "abc123", 55);
+		Student studentMartijn = new Student("Martijn", "Salm van der", "blabla44421", 30);
+		Student studentDennis = new Student("Dennis", "Geurts", "A4D9I08JE", 30);
+		
+		Course courseBasic = new Course("Basic", "Basic Course");
+		Course courseMedium = new Course("Medium", "Medium Course");
+		Course courseAdvanced = new Course("Advanced", "Advanced Course");
+		
+		studentRepository.save( studentRob );
+		studentRepository.save( studentMartijn);
+		studentRepository.save( studentDennis);
+		
+		courseRepository.save(courseBasic);
+		courseRepository.save(courseMedium);
+		courseRepository.save(courseAdvanced);
+		
+		studentRob.getCourses().add(courseMedium);
+
+		studentRob.getCourses().add(courseAdvanced);
+		studentRepository.save(studentRob);
+		
+		studentMartijn.getCourses().add(courseBasic);
+		studentRepository.save(studentMartijn);
+				
 	}
 	
 	/**
