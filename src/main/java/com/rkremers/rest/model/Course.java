@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import org.springframework.hateoas.ResourceSupport;
 
@@ -20,12 +20,13 @@ public class Course extends ResourceSupport implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="id")
+	@Column(name="course_id")
 	private long courseId;
 	private String name;
 	private String topic;
 	
-	@ManyToMany(mappedBy="courses")
+//	@ManyToMany(mappedBy="courses")
+	@OneToMany(mappedBy = "course")
 	private Set<Student> students = new HashSet<Student>();
 //	private List<Student> students = new ArrayList<Student>();
 	

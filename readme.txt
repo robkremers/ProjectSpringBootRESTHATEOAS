@@ -217,7 +217,7 @@ Sources under study:
 2018-02-26:
 
 Implementation of the ORM: student <==> course.
-This does not yet work correctly.
+This works correctly now.
 
 Test in the H2 database:
 	select * from student;
@@ -225,3 +225,22 @@ Test in the H2 database:
 	select * from course;
 	
 	select * from student_course;
+
+2018-02-27:
+
+Instead of a @ManyToMany relationship with @JoinTable I'll use a real join table
+with 2 @ManyToOne, because the join table STUDENT_COURSE needs to contain a few specific properties:
+- Year in which the course has been given.
+- Result of the exam taken by the student.
+
+Possible methods:
+- http://www.codejava.net/frameworks/hibernate/hibernate-many-to-many-association-with-extra-columns-in-join-table-example
+	- Using a Separate Primary Key for the Join Table.
+	- Using Composite Key.
+	* The first method is recommended because it is simpler.
+	* My opinion: if the combination of the two entities (Student / Course) would be used more often I would
+	  use the Composite Key.
+	* Note that cascading / orphan removal may need special attention in the code.
+
+
+	

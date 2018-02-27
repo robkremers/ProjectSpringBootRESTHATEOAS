@@ -1,4 +1,4 @@
-package com.rkremers.rest;
+package com.rkremers.rest.basicTests;
 
 public class TestThisClass {
 
