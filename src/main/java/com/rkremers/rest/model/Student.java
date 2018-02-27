@@ -39,15 +39,8 @@ public class Student extends ResourceSupport implements Serializable {
 	@Column(nullable=false)
 	private int age;
 	
-//	@ManyToMany
-//	@JoinTable(name = "Student_Course"
-//    , joinColumns=@JoinColumn(name = "STUDENT_ID")
-//    , inverseJoinColumns = @JoinColumn(name = "COURSE_ID")
-//    )
 	@OneToMany(mappedBy = "student")
-	private Set<Course> courses = new HashSet<Course>();
-//	private List<Course> courses = new ArrayList<Course>();
-	
+	private Set<StudentCourse> studentCourses = new HashSet<StudentCourse>();
 	
 	public Student() {
 		
@@ -97,12 +90,12 @@ public class Student extends ResourceSupport implements Serializable {
 		this.age = age;
 	}
 
-	public Set<Course> getCourses() {
-		return courses;
+	public Set<StudentCourse> getStudentCourses() {
+		return studentCourses;
 	}
 
-	public void setCourses(Set<Course> courses) {
-		this.courses = courses;
+	public void setStudentCourses(Set<StudentCourse> studentCourses) {
+		this.studentCourses = studentCourses;
 	}
 
 	@Override

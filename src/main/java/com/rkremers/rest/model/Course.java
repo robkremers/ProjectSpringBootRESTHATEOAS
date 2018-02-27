@@ -25,10 +25,8 @@ public class Course extends ResourceSupport implements Serializable {
 	private String name;
 	private String topic;
 	
-//	@ManyToMany(mappedBy="courses")
 	@OneToMany(mappedBy = "course")
-	private Set<Student> students = new HashSet<Student>();
-//	private List<Student> students = new ArrayList<Student>();
+	private Set<StudentCourse> studentCourses = new HashSet<StudentCourse>();
 	
 	public Course() {
 		// TODO Auto-generated constructor stub
@@ -56,12 +54,13 @@ public class Course extends ResourceSupport implements Serializable {
 		this.topic = courseTopic;
 	}
 
-	public Set<Student> getStudents() {
-		return students;
+
+	public Set<StudentCourse> getStudentCourses() {
+		return studentCourses;
 	}
 
-	public void setStudents(Set<Student> students) {
-		this.students = students;
+	public void setStudentCourses(Set<StudentCourse> studentCourses) {
+		this.studentCourses = studentCourses;
 	}
 
 	public long getCourseId() {

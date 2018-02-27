@@ -16,6 +16,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 import org.springframework.hateoas.ResourceSupport;
 /**
@@ -49,12 +51,20 @@ public class StudentCourse extends ResourceSupport implements Serializable {
 	
 	// Additional fields (reason why not a Join Table has been used).
 	@Temporal(TemporalType.DATE)
+	@NotNull
 	private Date registrationDate;
+	
 	@Min(value=0)
 	@Max(value=10)
-	private float result;
+	@Column(nullable = true)
+	private double result;
 	
 	public StudentCourse() {}
+
+	public StudentCourse(Date registrationDate) {
+		super();
+		this.registrationDate = registrationDate;
+	}
 
 	public Student getStudent() {
 		return student;
@@ -80,11 +90,11 @@ public class StudentCourse extends ResourceSupport implements Serializable {
 		this.registrationDate = registrationDate;
 	}
 
-	public float getResult() {
+	public double getResult() {
 		return result;
 	}
 
-	public void setResult(float result) {
+	public void setResult(double result) {
 		this.result = result;
 	}
 
@@ -94,7 +104,9 @@ public class StudentCourse extends ResourceSupport implements Serializable {
 		int result = super.hashCode();
 		result = prime * result + ((course == null) ? 0 : course.hashCode());
 		result = prime * result + ((registrationDate == null) ? 0 : registrationDate.hashCode());
-		result = prime * result + Float.floatToIntBits(this.result);
+		long temp;
+		temp = Double.doubleToLongBits(this.result);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((student == null) ? 0 : student.hashCode());
 		result = prime * result + (int) (studentCourseId ^ (studentCourseId >>> 32));
 		return result;
@@ -119,7 +131,7 @@ public class StudentCourse extends ResourceSupport implements Serializable {
 				return false;
 		} else if (!registrationDate.equals(other.registrationDate))
 			return false;
-		if (Float.floatToIntBits(result) != Float.floatToIntBits(other.result))
+		if (Double.doubleToLongBits(result) != Double.doubleToLongBits(other.result))
 			return false;
 		if (student == null) {
 			if (other.student != null)

@@ -242,5 +242,12 @@ Possible methods:
 	  use the Composite Key.
 	* Note that cascading / orphan removal may need special attention in the code.
 
+I have had a problem, when saving the StudentCourse instance.
+Ultimately this was caused by validation constraints.
+At the end I have commented all constraints in Course and in Student.
+Now it works.
+I'll comment out the constraints one by one to figure out which constraint is causing the problem
+and more important why it is causing the problem.
+
 
 	
