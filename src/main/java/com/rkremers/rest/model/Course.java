@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,15 +23,15 @@ public class Course extends ResourceSupport implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="course_id")
 	private long courseId;
+	@Column(length=200, nullable=false)
 	private String name;
+	@Column(length=500, nullable=false)
 	private String topic;
 	
-	@OneToMany(mappedBy = "course")
+	@OneToMany(mappedBy = "course", fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<StudentCourse> studentCourses = new HashSet<StudentCourse>();
 	
-	public Course() {
-		// TODO Auto-generated constructor stub
-	}
+	public Course() {}
 
 	public Course(String courseName, String courseTopic) {
 		super();

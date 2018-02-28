@@ -3,6 +3,12 @@ Date	: 2018-02-12.
 Purpose:
 An application to show the implementation of the HATEOAS design pattern in a Spring Boot REST application.
 
+
+--------------------------------------------------------------------------------------------------
+Todo:
+- 2018-02-28: Go through the code.
+- 2018-02-28: Implement repositories / services
+--------------------------------------------------------------------------------------------------
 Git:
 The application will be available on: 
 https://github.com/robkremers/ProjectSpringBootRESTHATEOAS
@@ -24,35 +30,6 @@ git:
   514  git push -u origin master
   515  git status
   516  history
-
-Sources:
-
-API:
-- https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/
-- https://docs.spring.io/spring-framework/docs/current/javadoc-api/index.html
-- https://docs.spring.io/spring-boot/docs/1.5.10.RELEASE/api/index.html
-- https://docs.spring.io/spring-hateoas/docs/current/api/index.html
-- https://docs.spring.io/spring-hateoas/docs/current/reference/html/
-- https://docs.spring.io/spring-data/jpa/docs/current/api/index.html
-- https://dzone.com/articles/applying-hateoas-to-a-rest-api-with-spring-boot
-- https://courses.in28minutes.com/p/spring-boot-for-beginners-in-10-steps
-
-- http://www.springboottutorial.com/spring-boot-crud-rest-service-with-jpa-hibernate
-- https://dzone.com/articles/spring-boot-hateoas-for-restful-services
-- http://www.baeldung.com/spring-hateoas-tutorial
-- Een entiteit extenden voor ResourceSupport.
-- https://dzone.com/articles/applying-hateoas-to-a-rest-api-with-spring-boot
-
-Logging:
-- https://www.quickprogrammingtips.com/spring-boot/using-log4j2-with-spring-boot.html
-	
-JUnit:
-- https://junit.org
-- https://junit.org/junit5/docs/current/user-guide/
-- https://junit.org/junit5/docs/current/api/
-- https://junit.org/junit4/javadoc/4.10/
-- https://www.tutorialspoint.com/junit/index.htm
-
 
 
 ---------------------------------------------------------------------------------------------------
@@ -216,7 +193,10 @@ Sources under study:
 ---------------------------------------------------------------------------------------------------
 2018-02-26:
 
-Implementation of the ORM: student <==> course.
+Implementation of the ORM: student <== StudentCourse ==> course.
+- In this implementation StudentCourse is a JoinTable.
+  However due to having to add student / course specific properties this became a full entity in it's own right.
+
 This works correctly now.
 
 Test in the H2 database:
@@ -242,12 +222,64 @@ Possible methods:
 	  use the Composite Key.
 	* Note that cascading / orphan removal may need special attention in the code.
 
-I have had a problem, when saving the StudentCourse instance.
-Ultimately this was caused by validation constraints.
-At the end I have commented all constraints in Course and in Student.
-Now it works.
-I'll comment out the constraints one by one to figure out which constraint is causing the problem
-and more important why it is causing the problem.
+
+- 2018-02-28: Implement repositories / services
+
+- Student:
+	- Get students
+	- Get students/{studentId}/courses
+- Course:
+	- Get courses
+	- Get courses/{courseId}/students
+- StudentCourse:
+	- Get courses in a given year.
+	- Get students who passed for a given course (result > 5.5).
+		courses/{courseId}/
+- Post:
+	- student
+	- course
+	- Add a course to a student.
+		- Constraint:
+			- A student can only follow a course if the precursor has been passed, if there is one.
+- Delete:
+	- It should not be possible to delete a course or a student.
+- Update:
+	- (For the moment) it should not be possible to update a course or a student.
+
+---------------------------------------------------------------------------------------------------
+Sources:
+
+API:
+- https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/
+- https://docs.spring.io/spring-framework/docs/current/javadoc-api/index.html
+- https://docs.spring.io/spring-boot/docs/1.5.10.RELEASE/api/index.html
+- https://docs.spring.io/spring-hateoas/docs/current/api/index.html
+- https://docs.spring.io/spring-hateoas/docs/current/reference/html/
+- https://docs.spring.io/spring-data/jpa/docs/current/api/index.html
+- https://dzone.com/articles/applying-hateoas-to-a-rest-api-with-spring-boot
+- https://courses.in28minutes.com/p/spring-boot-for-beginners-in-10-steps
+
+- http://www.springboottutorial.com/spring-boot-crud-rest-service-with-jpa-hibernate
+- https://dzone.com/articles/spring-boot-hateoas-for-restful-services
+- http://www.baeldung.com/spring-hateoas-tutorial
+- Een entiteit extenden voor ResourceSupport.
+- https://dzone.com/articles/applying-hateoas-to-a-rest-api-with-spring-boot
+
+Logging:
+- https://www.quickprogrammingtips.com/spring-boot/using-log4j2-with-spring-boot.html
+	
+JUnit:
+- https://junit.org
+- https://junit.org/junit5/docs/current/user-guide/
+- https://junit.org/junit5/docs/current/api/
+- https://junit.org/junit4/javadoc/4.10/
+- https://www.tutorialspoint.com/junit/index.htm
+
+JPA:
+- Pro JPA 2 - Mastering the Java Persistence API.pdf
+- http://www.codejava.net/frameworks/hibernate/hibernate-many-to-many-association-with-extra-columns-in-join-table-example
+- https://vladmihalcea.com/the-best-way-to-map-a-many-to-many-association-with-extra-columns-when-using-jpa-and-hibernate/
+- http://www.codejava.net/frameworks/hibernate/hibernate-many-to-many-association-with-extra-columns-in-join-table-example
 
 
 	
