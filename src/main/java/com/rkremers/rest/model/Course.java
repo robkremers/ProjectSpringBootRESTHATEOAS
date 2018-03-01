@@ -10,10 +10,17 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.springframework.hateoas.ResourceSupport;
 
+/**
+ * 
+ * @author rokremer
+ *
+ */
 @Entity
 public class Course extends ResourceSupport implements Serializable {
 
@@ -30,6 +37,21 @@ public class Course extends ResourceSupport implements Serializable {
 	
 	@OneToMany(mappedBy = "course", fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<StudentCourse> studentCourses = new HashSet<StudentCourse>();
+	
+	/** Add a precursor course, if there is one.
+	* In this (simple) model a course can have at most one precursor.
+	* If the course does have a precursor the student should have followed the precursor
+	* before this course can be followed.
+	* 
+	*/
+	@OneToOne( optional = true
+			 , orphanRemoval = true
+			 , fetch = FetchType.LAZY
+			 )
+	// I did not want to use the standard name PRECURSOR_COURSE_COURSE_ID
+	// because the relation is table internal.
+	@JoinColumn(name="PRECURSOR_COURSE_ID")
+	private Course precursorCourse;
 	
 	public Course() {}
 
@@ -72,6 +94,13 @@ public class Course extends ResourceSupport implements Serializable {
 		this.courseId = courseId;
 	}
 
+	public Course getPrecursorCourse() {
+		return precursorCourse;
+	}
+
+	public void setPrecursorCourse(Course precursorCourse) {
+		this.precursorCourse = precursorCourse;
+	}
 
 	@Override
 	public int hashCode() {
@@ -79,6 +108,7 @@ public class Course extends ResourceSupport implements Serializable {
 		int result = super.hashCode();
 		result = prime * result + (int) (courseId ^ (courseId >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((precursorCourse == null) ? 0 : precursorCourse.hashCode());
 		result = prime * result + ((topic == null) ? 0 : topic.hashCode());
 		return result;
 	}
@@ -99,6 +129,11 @@ public class Course extends ResourceSupport implements Serializable {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
+		if (precursorCourse == null) {
+			if (other.precursorCourse != null)
+				return false;
+		} else if (!precursorCourse.equals(other.precursorCourse))
+			return false;
 		if (topic == null) {
 			if (other.topic != null)
 				return false;
@@ -109,9 +144,9 @@ public class Course extends ResourceSupport implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Course [courseId=" + courseId + ", name=" + name + ", topic=" + topic + "]";
-	}
-	
+		return "Course [courseId=" + courseId + ", name=" + name + ", topic=" + topic + ", studentCourses="
+				+ studentCourses + ", precursorCourse=" + precursorCourse + "]";
+	}	
 
 
 }

@@ -18,8 +18,9 @@ import com.rkremers.rest.model.Student;
 public interface StudentRepository extends JpaRepository<Student, Long> {
 	
 	public Optional<Student> findByStudentId(long studentId);
-
-	public Student findByPassportNumber(String passportNumber);
+	
+	public Optional<Student> findByPassportNumber(String passportNumber);
 
 	public void deleteByStudentId(long studentId);
+	
 }

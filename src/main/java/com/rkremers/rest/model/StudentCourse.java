@@ -59,10 +59,20 @@ public class StudentCourse extends ResourceSupport implements Serializable {
 	@Column(nullable = true)
 	private double result;
 	
-	public StudentCourse() {}
+	public StudentCourse() {
+		super();
+		this.registrationDate = new Date();		
+	}
 
 	public StudentCourse(Date registrationDate) {
 		super();
+		this.registrationDate = registrationDate;
+	}	
+
+	public StudentCourse(Student student, Course course, Date registrationDate) {
+		super();
+		this.student = student;
+		this.course = course;
 		this.registrationDate = registrationDate;
 	}
 

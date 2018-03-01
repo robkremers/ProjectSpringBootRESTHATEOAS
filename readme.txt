@@ -223,11 +223,16 @@ Possible methods:
 	* Note that cascading / orphan removal may need special attention in the code.
 
 
-- 2018-02-28: Implement repositories / services
+- 2018-02-28 / 2018-03-01: Implement repositories / services
 
 - Student:
 	- Get students
 	- Get students/{studentId}/courses
+	- Post student
+		* Check that the passport number is present.
+		* Check that the passport number is unique.
+	- Add a course to a student.
+		* Check that the course exists.
 - Course:
 	- Get courses
 	- Get courses/{courseId}/students
@@ -246,6 +251,9 @@ Possible methods:
 - Update:
 	- (For the moment) it should not be possible to update a course or a student.
 
+*****
+Continue tomorrow at class StudentService.java.
+*****
 ---------------------------------------------------------------------------------------------------
 Sources:
 

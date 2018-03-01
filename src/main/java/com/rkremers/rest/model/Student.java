@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.hateoas.ResourceSupport;
 
@@ -23,7 +24,8 @@ import org.springframework.hateoas.ResourceSupport;
  *
  */
 @Entity
-@Table(name="student")
+@Table( name="student"
+       , uniqueConstraints= @UniqueConstraint(columnNames= {"PASSPORT_NUMBER"} ))
 public class Student extends ResourceSupport implements Serializable {
 
 	private static final long serialVersionUID = 800254957232955699L;
@@ -35,7 +37,7 @@ public class Student extends ResourceSupport implements Serializable {
 	private String firstName;
 	@Column(length=200, nullable=false)
 	private String lastName;
-	@Column(length=100, nullable=false)
+	@Column(length=100, nullable=false, name="PASSPORT_NUMBER")
 	private String passportNumber;
 	@Column(nullable=false)
 	private int age;

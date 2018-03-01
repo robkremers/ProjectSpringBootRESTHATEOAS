@@ -78,6 +78,11 @@ public class ProjectSpringBootResthateoasApplication implements CommandLineRunne
 		logger.info(courseBasic.toString());
 		logger.info("********** End Overview of the Courses: **********");
 
+		courseMedium.setPrecursorCourse(courseBasic);
+		courseRepository.save(courseMedium);
+		
+		courseAdvanced.setPrecursorCourse(courseMedium);
+		courseRepository.save(courseAdvanced);
 		
 //		studentRob.getCourses().add(courseMedium);
 //
@@ -99,8 +104,16 @@ public class ProjectSpringBootResthateoasApplication implements CommandLineRunne
 		
 		studentCourseRepository.save(studentCourseRob);
 		
-		
-				
+		logger.info("********** Saving student Iris: **********");
+		Student studentIris = new Student("Iris", "Kikuchi", "PassportNrTest", 30);
+		studentRepository.save(studentIris);
+		logger.info("********** Saved student Iris: **********");
+
+//		logger.info("********** Saving student Hahahiha: **********");
+//		Student studentTest = new Student("Hahahiha", "Test", "PassportNrTest", 30);
+//		studentRepository.save(studentTest);
+//		logger.info("********** Saved student Iris: **********");
+
 	}
 	
 	/**
