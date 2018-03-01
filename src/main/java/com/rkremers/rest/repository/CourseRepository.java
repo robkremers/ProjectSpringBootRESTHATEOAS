@@ -9,6 +9,8 @@ import com.rkremers.rest.model.Course;
 public interface CourseRepository extends JpaRepository<Course, Long> {
 	
 	public Optional<Course> findByCourseId(long courseId);
+	
+	public Optional<Course> 
 
 
 }
