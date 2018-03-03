@@ -24,7 +24,7 @@ import org.springframework.hateoas.ResourceSupport;
  *
  */
 @Entity
-@Table( name="student"
+@Table( name="STUDENT"
        , uniqueConstraints= @UniqueConstraint(columnNames= {"PASSPORT_NUMBER"} ))
 public class Student extends ResourceSupport implements Serializable {
 

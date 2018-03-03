@@ -1,6 +1,7 @@
 package com.rkremers.rest.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,5 +14,7 @@ public interface StudentCourseRepository extends JpaRepository<StudentCourse, Lo
 	public List<StudentCourse> findByCourse(Course course);
 	
 	public List<StudentCourse> findByStudent(Student student);
+	
+	public Optional<StudentCourse> findByStudentAndCourse(Student student, Course course);
 
 }

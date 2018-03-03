@@ -10,7 +10,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 	
 	public Optional<Course> findByCourseId(long courseId);
 	
-	public Optional<Course> 
+	public Optional<Course> findByName(String name);
+	
+//	public Optional<Course> 
 
 
 }

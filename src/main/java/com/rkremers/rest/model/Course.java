@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.hateoas.ResourceSupport;
 
@@ -22,6 +24,8 @@ import org.springframework.hateoas.ResourceSupport;
  *
  */
 @Entity
+@Table( name="COURSE"
+, uniqueConstraints= @UniqueConstraint(columnNames= {"NAME"} ))
 public class Course extends ResourceSupport implements Serializable {
 
 	private static final long serialVersionUID = -4254287335591834230L;
@@ -30,10 +34,12 @@ public class Course extends ResourceSupport implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="course_id")
 	private long courseId;
-	@Column(length=200, nullable=false)
+	@Column(length=200, nullable=false, name="NAME")
 	private String name;
 	@Column(length=500, nullable=false)
 	private String topic;
+	@Column(nullable=false)
+	private double minimumScore;
 	
 	@OneToMany(mappedBy = "course", fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<StudentCourse> studentCourses = new HashSet<StudentCourse>();

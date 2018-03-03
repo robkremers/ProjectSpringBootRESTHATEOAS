@@ -13,14 +13,16 @@ import org.springframework.context.annotation.Profile;
 import com.rkremers.rest.model.Course;
 import com.rkremers.rest.model.Student;
 import com.rkremers.rest.model.StudentCourse;
+import com.rkremers.rest.model.StudyConfiguration;
 import com.rkremers.rest.repository.CourseRepository;
 import com.rkremers.rest.repository.StudentCourseRepository;
 import com.rkremers.rest.repository.StudentRepository;
+import com.rkremers.rest.repository.StudyConfigurationRepository;
 
 /**
  * Note:
  * @SpringBootApplication is a convenience annotation that adds all of the following:
- * @Configuration tags the class as a source of bean definitions for the application context.
+ * @StudyConfiguration tags the class as a source of bean definitions for the application context.
  * @EnableAutoConfiguration tells Spring Boot to start adding beans based on classpath settings, other beans, and various property settings.
  * Normally you would add @EnableWebMvc for a Spring MVC app, but Spring Boot adds it automatically when it sees spring-webmvc on the classpath. 
  * This flags the application as a web application and activates key behaviors such as setting up a DispatcherServlet.
@@ -43,6 +45,9 @@ public class ProjectSpringBootResthateoasApplication implements CommandLineRunne
 	
 	@Autowired
 	private StudentCourseRepository studentCourseRepository;
+	
+	@Autowired
+	private StudyConfigurationRepository studyConfigurationRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectSpringBootResthateoasApplication.class, args);
@@ -53,6 +58,15 @@ public class ProjectSpringBootResthateoasApplication implements CommandLineRunne
 	 */
 	@Override
 	public void run(String... args) throws Exception {
+
+		logger.info("********** Saving the configurations: **********\n");
+		
+		logger.info("********** Saving the standard note for passing an exam: **********");
+		StudyConfiguration passValue = new StudyConfiguration("Standard Pass Value", "5.50", "Standard value for passing an exam.");
+		studyConfigurationRepository.save(passValue);
+		logger.info("********** Saved the standard note for passing an exam: **********");
+
+		logger.info("********** Saving the customer data: **********\n");
 		
 		Student studentRob = new Student("Rob", "Kremers", "abc123", 55);
 		Student studentMartijn = new Student("Martijn", "Salm van der", "blabla44421", 30);
@@ -113,7 +127,7 @@ public class ProjectSpringBootResthateoasApplication implements CommandLineRunne
 //		Student studentTest = new Student("Hahahiha", "Test", "PassportNrTest", 30);
 //		studentRepository.save(studentTest);
 //		logger.info("********** Saved student Iris: **********");
-
+				
 	}
 	
 	/**

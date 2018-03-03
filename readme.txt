@@ -205,6 +205,8 @@ Test in the H2 database:
 	select * from course;
 	
 	select * from student_course;
+	
+	select * from configuration;
 
 2018-02-27:
 
