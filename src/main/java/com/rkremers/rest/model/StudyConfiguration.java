@@ -19,6 +19,11 @@ import org.springframework.hateoas.ResourceSupport;
  * Note that this table is intended for application properties and not for system / environment properties.
  * These properties would normally be defined in file application.properties.
  * 
+ * Note:
+ * The NamedQuery StudyConfiguration.findParameterValue is not really necessary.
+ * But it shows how to use them in Spring Boot JPA.
+ * Check how the query call is defined in StudyConfigurationRepository.
+ * 
  * @author LTAdmin
  *
  */

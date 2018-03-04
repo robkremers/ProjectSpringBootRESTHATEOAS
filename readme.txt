@@ -206,7 +206,7 @@ Test in the H2 database:
 	
 	select * from student_course;
 	
-	select * from configuration;
+	select * from study_configuration;
 
 2018-02-27:
 
@@ -290,6 +290,6 @@ JPA:
 - http://www.codejava.net/frameworks/hibernate/hibernate-many-to-many-association-with-extra-columns-in-join-table-example
 - https://vladmihalcea.com/the-best-way-to-map-a-many-to-many-association-with-extra-columns-when-using-jpa-and-hibernate/
 - http://www.codejava.net/frameworks/hibernate/hibernate-many-to-many-association-with-extra-columns-in-join-table-example
-
+- https://egkatzioura.com/2017/03/02/spring-data-with-jpa-and-namedqueries/
 
 	

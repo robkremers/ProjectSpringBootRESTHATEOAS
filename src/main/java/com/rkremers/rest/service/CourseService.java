@@ -10,12 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rkremers.rest.exception.CourseNotFoundException;
+import com.rkremers.rest.exception.StudentNotFoundException;
+import com.rkremers.rest.exception.StudyConfigurationNotFound;
 import com.rkremers.rest.model.Course;
 import com.rkremers.rest.model.Student;
 import com.rkremers.rest.model.StudentCourse;
+import com.rkremers.rest.model.StudyConfiguration;
 import com.rkremers.rest.repository.CourseRepository;
 import com.rkremers.rest.repository.StudentCourseRepository;
 import com.rkremers.rest.repository.StudentRepository;
+import com.rkremers.rest.repository.StudyConfigurationRepository;
 
 /**
  * Functionality:
@@ -46,11 +50,26 @@ public class CourseService {
 	@Autowired
 	StudentCourseRepository studentCourseRepository;
 	
+	@Autowired
+	private StudyConfigurationRepository studyConfigurationRepository;
+	
+	private Optional<StudyConfiguration> standardPassValue;
+	
 	public CourseService() {}
 
 	public List<Course> getAllCourses() {
 		List<Course> courses = courseRepository.findAll();
 		return courses;
+	}
+	
+	public Optional<Course> getCourse(long courseId) {
+		
+		Optional<Course> course = courseRepository.findByCourseId(courseId);
+		if (!course.isPresent() ) {
+			throw new CourseNotFoundException("A course with id " + courseId + " has not been found.");
+		}
+		
+		return course;
 	}
 	
 	/**
@@ -62,7 +81,7 @@ public class CourseService {
 	 * @param course
 	 * @return
 	 */
-	public List<Student> getAllStudents(Course course) {
+	public List<Student> getAllCourseStudents(Course course) {
 		List<StudentCourse> studentCourses = studentCourseRepository.findByCourse(course);
 		List<Student> students = new ArrayList<Student>();
 		for (StudentCourse studentCourse : studentCourses) {
@@ -73,10 +92,33 @@ public class CourseService {
 		return students;
 	}
 	
+	/**
+	 * Purpose:
+	 * Save a new type of course.
+	 * 
+	 * Functionality:
+	 * If the course does not already contain a value for the minimum score that needs to be passed in order 
+	 * to successfully pass the exam it's value will be set here, using the setting in table STUDY_CONFIGURATION
+	 * for parameter value "Standard Pass Value".
+	 * 
+	 * @param course
+	 * @return
+	 */
 	public Course addCourse(Course course) {
+
+		standardPassValue = studyConfigurationRepository.findByParameterName("Standard Pass Value");
+		if ( !standardPassValue.isPresent() ) {
+			throw new StudyConfigurationNotFound("The value for Standard Pass Value could not be found.");
+		}
 		
+		double doubleStandardPassValue = Double.parseDouble(standardPassValue.get().getParameterStrValue());
+		
+		if (course.getMinimumScore() == 0.0F) {
+			course.setMinimumScore(doubleStandardPassValue);
+		}
+
 		courseRepository.save(course);
-		Optional<Course> savedCourse = courseRepository.findByName(course.getCourseName());
+		Optional<Course> savedCourse = courseRepository.findByName(course.getName());
 		
 		return savedCourse.get();
 	}
@@ -93,6 +135,10 @@ public class CourseService {
 		
 		return updateCourse.get();
 		
+	}
+	
+	public void deleteCourse(Course course) {
+		courseRepository.delete(course);
 	}
 	
 }

@@ -17,9 +17,11 @@ import com.rkremers.rest.exception.MissingPassPortNumberException;
 import com.rkremers.rest.exception.PrecursorCourseNotFollowedException;
 import com.rkremers.rest.exception.PrecursorCourseNotPassedException;
 import com.rkremers.rest.exception.StudentNotFoundException;
+import com.rkremers.rest.exception.StudyConfigurationNotFound;
 import com.rkremers.rest.model.Course;
 import com.rkremers.rest.model.Student;
 import com.rkremers.rest.model.StudentCourse;
+import com.rkremers.rest.model.StudyConfiguration;
 import com.rkremers.rest.repository.CourseRepository;
 import com.rkremers.rest.repository.StudentCourseRepository;
 import com.rkremers.rest.repository.StudentRepository;
@@ -49,18 +51,28 @@ public class StudentService {
 	
 	@Autowired
 	private StudyConfigurationRepository studyConfigurationRepository;
+	
+	private Optional<StudyConfiguration> standardPassValue;
 
 	public StudentService() {
 	}
 	
 	@PostConstruct
 	private void init() {
-		// Continue here tomorrow: the passing value 5.5 should be configurable.
 	}
 
 	public List<Student> getAllStudents() {
 		List<Student> students = studentRepository.findAll();
 		return students;
+	}
+	
+	public Student getStudent(Long studentId) {
+		Optional<Student> student = studentRepository.findByStudentId(studentId);
+		if (!student.isPresent() ) {
+			throw new StudentNotFoundException("A student with id " + student.get().getStudentId() + " has not been found.");
+		}
+		
+		return student.get();
 	}
 
 	/**
@@ -73,7 +85,7 @@ public class StudentService {
 	 * @param course
 	 * @return
 	 */
-	public List<Course> getAllCourses(Student student) {
+	public List<Course> getAllStudentCourses(Student student) {
 		List<StudentCourse> studentCourses = studentCourseRepository.findByStudent(student);
 		List<Course> courses = new ArrayList<Course>();
 		for (StudentCourse studentCourse: studentCourses) {
@@ -117,9 +129,11 @@ public class StudentService {
 	 * - Check that the course exists. 
 	 * - Check whether the course has a preceding course. In that case the
 	 * student should have followed the preceding course or not be able to enroll.
+	 * 
 	 * If the student is enrolling for a course that does not have a precursor
 	 * course or if the student has passed the precursor course the student will be
 	 * linked to the course. 
+	 * 
 	 * Return an overview of the StudentCourse in which the
 	 * student has been involved.
 	 * 
@@ -151,6 +165,12 @@ public class StudentService {
 		 */
 		if (precursorCourse != null) {
 			boolean hasFollowedPrecursorCourse = false;
+			standardPassValue = studyConfigurationRepository.findByParameterName("Standard Pass Value");
+			if ( !standardPassValue.isPresent() ) {
+				throw new StudyConfigurationNotFound("The value for Standard Pass Value could not be found.");
+			}
+			
+			double doubleStandardPassValue = Double.parseDouble(standardPassValue.get().getParameterStrValue());
 
 			List<StudentCourse> previousStudentCourses = studentCourseRepository.findByStudent(student);
 			for (StudentCourse studentCourse : previousStudentCourses) {
@@ -164,15 +184,15 @@ public class StudentService {
 			if (hasFollowedPrecursorCourse == false ) {
 				throw new PrecursorCourseNotFollowedException(
 						"The student with id" + student.getStudentId() + " can not enroll for the course with id "
-								+ course.getCourseId() + ". " + " First course " + precursorCourse.getCourseName()
+								+ course.getCourseId() + ". " + " First course " + precursorCourse.getName()
 								+ " with id " + precursorCourse.getCourseId() + " has to be finished.");
 			}
 
-			if (hasFollowedPrecursorCourse == true && precursorStudentCourse.getResult() < 5.5 ) {
+			if (hasFollowedPrecursorCourse == true && precursorStudentCourse.getResult() < doubleStandardPassValue ) {
 					throw new PrecursorCourseNotPassedException(
 							"The student with id" + student.getStudentId() + " can not enroll for the course with id "
 									+ course.getCourseId() + ". " + " The student first has to pass precursor course "
-									+ precursorStudentCourse.getCourse().getCourseName() + " with id "
+									+ precursorStudentCourse.getCourse().getName() + " with id "
 									+ precursorStudentCourse.getCourse().getCourseId() + " successfully.");
 				}
 

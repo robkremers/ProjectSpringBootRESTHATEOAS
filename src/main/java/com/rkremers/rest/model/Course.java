@@ -39,7 +39,7 @@ public class Course extends ResourceSupport implements Serializable {
 	@Column(length=500, nullable=false)
 	private String topic;
 	@Column(nullable=false)
-	private double minimumScore;
+	private double minimumScore = 0.0F;
 	
 	@OneToMany(mappedBy = "course", fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<StudentCourse> studentCourses = new HashSet<StudentCourse>();
@@ -58,38 +58,23 @@ public class Course extends ResourceSupport implements Serializable {
 	// because the relation is table internal.
 	@JoinColumn(name="PRECURSOR_COURSE_ID")
 	private Course precursorCourse;
-	
-	public Course() {}
+
+	public Course() {
+	}
 
 	public Course(String courseName, String courseTopic) {
 		super();
 		this.name = courseName;
 		this.topic = courseTopic;
+
 	}
 
-	public String getCourseName() {
-		return name;
-	}
-
-	public void setCourseName(String courseName) {
+	public Course(String courseName, String courseTopic, double minimumScore) {
+		super();
 		this.name = courseName;
-	}
-
-	public String getCourseTopic() {
-		return topic;
-	}
-
-	public void setCourseTopic(String courseTopic) {
 		this.topic = courseTopic;
-	}
+		this.minimumScore = minimumScore;
 
-
-	public Set<StudentCourse> getStudentCourses() {
-		return studentCourses;
-	}
-
-	public void setStudentCourses(Set<StudentCourse> studentCourses) {
-		this.studentCourses = studentCourses;
 	}
 
 	public long getCourseId() {
@@ -98,6 +83,38 @@ public class Course extends ResourceSupport implements Serializable {
 
 	public void setCourseId(long courseId) {
 		this.courseId = courseId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getTopic() {
+		return topic;
+	}
+
+	public void setTopic(String topic) {
+		this.topic = topic;
+	}
+
+	public double getMinimumScore() {
+		return minimumScore;
+	}
+
+	public void setMinimumScore(double minimumScore) {
+		this.minimumScore = minimumScore;
+	}
+
+	public Set<StudentCourse> getStudentCourses() {
+		return studentCourses;
+	}
+
+	public void setStudentCourses(Set<StudentCourse> studentCourses) {
+		this.studentCourses = studentCourses;
 	}
 
 	public Course getPrecursorCourse() {
@@ -113,6 +130,9 @@ public class Course extends ResourceSupport implements Serializable {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + (int) (courseId ^ (courseId >>> 32));
+		long temp;
+		temp = Double.doubleToLongBits(minimumScore);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((precursorCourse == null) ? 0 : precursorCourse.hashCode());
 		result = prime * result + ((topic == null) ? 0 : topic.hashCode());
@@ -129,6 +149,8 @@ public class Course extends ResourceSupport implements Serializable {
 			return false;
 		Course other = (Course) obj;
 		if (courseId != other.courseId)
+			return false;
+		if (Double.doubleToLongBits(minimumScore) != Double.doubleToLongBits(other.minimumScore))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -150,9 +172,9 @@ public class Course extends ResourceSupport implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Course [courseId=" + courseId + ", name=" + name + ", topic=" + topic + ", studentCourses="
-				+ studentCourses + ", precursorCourse=" + precursorCourse + "]";
-	}	
+		return "Course [courseId=" + courseId + ", name=" + name + ", topic=" + topic + ", minimumScore=" + minimumScore
+				+ ", precursorCourse=" + precursorCourse + "]";
+	}
 
 
 }
