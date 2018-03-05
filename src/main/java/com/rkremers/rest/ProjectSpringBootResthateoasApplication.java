@@ -66,6 +66,8 @@ public class ProjectSpringBootResthateoasApplication implements CommandLineRunne
 	@Override
 	public void run(String... args) throws Exception {
 
+		List<Course> courses;
+		
 		logger.info("********** Saving the configurations: **********\n");
 		
 		logger.info("********** Saving the standard note for passing an exam: **********");
@@ -116,7 +118,7 @@ public class ProjectSpringBootResthateoasApplication implements CommandLineRunne
 		courseRepository.save(courseAdvanced);
 		
 		logger.info("********** Testing correct find courses, even though the precursor course is fetched lazily. **********");
-		List<Course> courses = courseService.getAllCourses();
+		courses = courseService.getAllCourses();
 //		logger.info("Number of stored courses: " + courses.size());
 		for (Course course: courses) {
 			logger.info(course.toString());
@@ -124,88 +126,85 @@ public class ProjectSpringBootResthateoasApplication implements CommandLineRunne
 		logger.info("********** Tested update via CourseService: **********");
 		
 		
-//		StudentCourse studentCourseRob = new StudentCourse(new Date() );
-//		studentCourseRepository.save(studentCourseRob);
-//		
-//		studentCourseRob.setStudent(studentRob);
-//		studentCourseRob.setCourse(courseBasic);
-//		studentCourseRob.setResult(9.0);
-//		logger.info("********** Overview of the StudentCourses: **********");
-//		logger.info(studentCourseRob.toString());
-//		logger.info("********** End Overview of the StudentCourses: **********");
-//		
-//		studentCourseRepository.save(studentCourseRob);
-//		
-//		logger.info("********** Saving student Iris: **********");
-//		Student studentIris = new Student("Iris", "Kikuchi", "PassportNrTest", 30);
-//		studentRepository.save(studentIris);
-//		logger.info("********** Saved student Iris: **********");
-//
-//
-//				
-//		/*
-//		 * Tests regarding the CourseService.
-//		 */
-//		
-//		logger.info("********** Saving Course courseTest: **********");
-//		Course courseTest = new Course("Test", "Test Course");		
-//		courseService.addCourse(courseTest);
-//		logger.info("********** Saved Course courseTest: **********");
-//		
-//		logger.info("********** Overview of all courses: **********");
-//		List<Course> courses = courseService.getAllCourses();
-//		for (Course course: courses) {
-//			logger.info(course.toString() );
-//		}
-//		logger.info("********** End overview of all courses: **********");
-//		
-//		logger.info("********** Find course 1: **********");
-//		Optional<Course> course1 = courseService.getCourse(1);
-//		if (course1.isPresent()) {
-//		  logger.info(course1.get().toString());
-//		} else {
-//			logger.info("A course with courseId 1 could not be found");
-//		}
-//		logger.info("********** Found course 1: **********");
-//
-//	
-//		logger.info("********** Find all students that have followed course 1: **********");
-//		List<Student> students = courseService.getAllCourseStudents(courseBasic);
-//		for (Student student: students) {
-//			logger.info(student.toString());
-//		}
-//		logger.info("********** Found all students that have followed course 1: **********");
-//		
-//		logger.info("********** Add Course courseTest2: **********");
-//		Course courseTest2 = new Course("Test2", "Test Course");
-//		logger.info("new course courseTest2: " + courseTest2.toString());
-//		courseTest2 = courseService.addCourse(courseTest2);
-//		logger.info("new course courseTest2: " + courseTest2.toString());
-//		logger.info("********** Added Course courseTest2: **********");
-//
-//		logger.info("********** Update Course courseTest2: **********");
-//		courseTest2.setPrecursorCourse(courseTest);
-//		logger.info("new course courseTest2: " + courseTest2.toString());
-//		// Continue here tomorrow: the service does not save the instance for the precursor course.
-//		courseTest2 = courseService.updateCourse(courseTest2);
-//		logger.info("new course courseTest2: " + courseTest2.toString());
-//		logger.info("********** Updated Course courseTest2: **********");		
-//		
-//		logger.info("********** Testing update via CourseService: **********");
-//		Course courseTest3 = new Course("Test3", "Test Course 3");
-//		courseService.addCourse(courseTest3);
-//		courseTest3.setPrecursorCourse(courseTest);
-//		courseRepository.save(courseTest3);
-//		Course courseUpdated = courseService.updateCourse(courseTest3);
-//		
-//		logger.info("Finding all courses, including the info that is being fetched lazily.");
-//		courses = courseService.getAllCourses();
-//		logger.info("Number of stored courses: " + courses.size());
-//		for (Course course: courses) {
-//			logger.info(course.toString());
-//		}
-//		logger.info("********** Tested update via CourseService: **********");
+		StudentCourse studentCourseRob = new StudentCourse(new Date() );
+		studentCourseRepository.save(studentCourseRob);
 		
+		studentCourseRob.setStudent(studentRob);
+		studentCourseRob.setCourse(courseBasic);
+		studentCourseRob.setResult(9.0);
+		logger.info("********** Overview of the StudentCourses: **********");
+		logger.info(studentCourseRob.toString());
+		logger.info("********** End Overview of the StudentCourses: **********");
+		
+		studentCourseRepository.save(studentCourseRob);
+		
+				
+		/*
+		 * Tests regarding the CourseService.
+		 */
+		
+		logger.info("********** Saving Course courseTest: **********");
+		Course courseTest = new Course("Test", "Test Course");		
+		courseService.addCourse(courseTest);
+		logger.info("********** Saved Course courseTest: **********");
+		
+		logger.info("********** Overview of all courses: **********");
+		courses = courseService.getAllCourses();
+		for (Course course: courses) {
+			logger.info(course.toString() );
+		}
+		logger.info("********** End overview of all courses: **********");
+		
+		logger.info("********** Find course 1: **********");
+		Optional<Course> course1 = courseService.getCourse(1);
+		if (course1.isPresent()) {
+		  logger.info(course1.get().toString());
+		} else {
+			logger.info("A course with courseId 1 could not be found");
+		}
+		logger.info("********** Found course 1: **********");
+
+	
+		logger.info("********** Find all students that have followed course 1: **********");
+		List<Student> students = courseService.getAllCourseStudents(courseBasic);
+		for (Student student: students) {
+			logger.info(student.toString());
+		}
+		logger.info("********** Found all students that have followed course 1: **********");
+		
+		logger.info("********** Add Course courseTest2: **********");
+		Course courseTest2 = new Course("Test2", "Test Course");
+		logger.info("new course courseTest2: " + courseTest2.toString());
+		courseTest2 = courseService.addCourse(courseTest2);
+		logger.info("new course courseTest2: " + courseTest2.toString());
+		logger.info("********** Added Course courseTest2: **********");
+
+		logger.info("********** Update Course courseTest2 setting precursor course: **********");
+		courseTest2.setPrecursorCourse(courseTest);
+		logger.info("new course courseTest2: " + courseTest2.toString());
+		// Continue here tomorrow: the service does not save the instance for the precursor course.
+		courseTest2 = courseService.updateCourse(courseTest2);
+		logger.info("new course courseTest2: " + courseTest2.toString());
+		logger.info("********** Updated Course courseTest2: **********");		
+		
+		logger.info("********** Testing update via CourseService: **********");
+		Course courseTest3 = new Course("Test3", "Test Course 3");
+		courseService.addCourse(courseTest3);
+		courseTest3.setPrecursorCourse(courseTest);
+		courseRepository.save(courseTest3);
+		Course courseUpdated = courseService.updateCourse(courseTest3);
+		
+		logger.info("Finding all courses, including the info that is being fetched lazily.\n");
+		courses = courseService.getAllCourses();
+		logger.info("Number of stored courses: " + courses.size());
+		for (Course course: courses) {
+			logger.info(course.toString());
+		}
+		logger.info("********** Tested update via CourseService: **********\n\n");
+		
+		logger.info("********** Tested deletion of a course: **********\n\n");
+		courseService.deleteCourse(courseTest3);
+		logger.info("********** Tested deletion of a course: **********\n\n");
 		
 	}
 	

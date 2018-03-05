@@ -290,6 +290,8 @@ JPA:
 - https://egkatzioura.com/2017/03/02/spring-data-with-jpa-and-namedqueries/
 
 * Fetching data that is normally fetched lazily:
+	- Due to encountering the error:
+			Caused by: org.hibernate.LazyInitializationException: could not initialize proxy - no Session
 	- Google: java spring boot FetchType.LAZY how to get data
 - http://javasampleapproach.com/hibernate/use-hibernate-lazy-fetch-eager-fetch-type-spring-boot-mysql
 - https://stackoverflow.com/questions/15359306/how-to-load-lazy-fetched-items-from-hibernate-jpa-in-my-controller

@@ -135,24 +135,45 @@ public class CourseService {
 		return savedCourse.get();
 	}
 	
+	/**
+	 * Functionality:
+	 * In class Course the property precursorCourse is annotated with fetch type FETCH.LAZY.
+	 * This means that normally when returning the updated entity the precursor course will not be shown.
+	 * Instead an exception may be thrown:
+	 * 		Caused by: org.hibernate.LazyInitializationException: could not initialize proxy - no Session
+	 * 
+	 * In order to resolve this the annotation @Transactional (with default TxType.REQUIRED) is used.
+	 * 
+	 * 
+	 * @param course
+	 * @return
+	 */
 	@Transactional
 	public Course updateCourse(Course course) {
-		logger.info("***** Updating course: " + course.toString() );
+		logger.info("***** Starting method updateCourse *****\n\n ");
+		logger.info("Entered course: " + course.toString() );
 		
 		Optional<Course> updateCourse = courseRepository.findByCourseId(course.getCourseId());
 
 		if (!updateCourse.isPresent())
 			throw new CourseNotFoundException("A course with id " + course.getCourseId() + " has not been found.");
 
-		Course newCourse = courseRepository.save(course );
-		logger.info("After saving the content of newCourse: " + newCourse.toString() );
+		Course updatedCourse = courseRepository.save(course );
+		logger.info("After saving the content of newCourse: " + updatedCourse.toString() );
 		
-		updateCourse = courseRepository.findByCourseId(course.getCourseId());
-		logger.info("Updated the course: " + updateCourse.get().toString() );
-		return updateCourse.get();
+		return updatedCourse;
 		
 	}
 	
+	/**
+	 * Functionality:
+	 * If a course is to be deleted it should not contain references to another entity.
+	 * Caused by: org.h2.jdbc.JdbcSQLException: Referential integrity constraint violation: "FKD8USNCISFGXUHSXP67CIVUB1R: PUBLIC.COURSE FOREIGN KEY(PRECURSOR_COURSE_ID) REFERENCES PUBLIC.COURSE(COURSE_ID) (4)"; SQL statement:
+	 *
+	 * Continue here tomorrow.
+	 * 
+	 * @param course
+	 */
 	public void deleteCourse(Course course) {
 		courseRepository.delete(course);
 	}
