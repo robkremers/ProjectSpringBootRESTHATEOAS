@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -52,6 +53,7 @@ public class Course extends ResourceSupport implements Serializable {
 	*/
 	@OneToOne( optional = true
 			 , orphanRemoval = true
+			 , cascade = CascadeType.ALL
 			 , fetch = FetchType.LAZY
 			 )
 	// I did not want to use the standard name PRECURSOR_COURSE_COURSE_ID

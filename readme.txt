@@ -201,11 +201,8 @@ This works correctly now.
 
 Test in the H2 database:
 	select * from student;
-	
 	select * from course;
-	
 	select * from student_course;
-	
 	select * from study_configuration;
 
 2018-02-27:
@@ -291,5 +288,13 @@ JPA:
 - https://vladmihalcea.com/the-best-way-to-map-a-many-to-many-association-with-extra-columns-when-using-jpa-and-hibernate/
 - http://www.codejava.net/frameworks/hibernate/hibernate-many-to-many-association-with-extra-columns-in-join-table-example
 - https://egkatzioura.com/2017/03/02/spring-data-with-jpa-and-namedqueries/
+
+* Fetching data that is normally fetched lazily:
+	- Google: java spring boot FetchType.LAZY how to get data
+- http://javasampleapproach.com/hibernate/use-hibernate-lazy-fetch-eager-fetch-type-spring-boot-mysql
+- https://stackoverflow.com/questions/15359306/how-to-load-lazy-fetched-items-from-hibernate-jpa-in-my-controller
+
+Error Handling:
+- http://www.baeldung.com/exception-handling-for-rest-with-spring?utm_source=email&utm_medium=email&utm_campaign=series1-rest&tl_inbound=1&tl_target_all=1&tl_period_type=3
 
 	

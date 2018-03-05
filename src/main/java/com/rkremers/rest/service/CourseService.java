@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+import javax.transaction.Transactional.TxType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rkremers.rest.exception.CourseNotFoundException;
-import com.rkremers.rest.exception.StudentNotFoundException;
 import com.rkremers.rest.exception.StudyConfigurationNotFound;
 import com.rkremers.rest.model.Course;
 import com.rkremers.rest.model.Student;
@@ -39,7 +41,7 @@ import com.rkremers.rest.repository.StudyConfigurationRepository;
 @Service
 public class CourseService {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(CourseService.class);
+	private static final Logger logger = LoggerFactory.getLogger(CourseService.class);
 
 	@Autowired
 	StudentRepository studentRepository;
@@ -57,11 +59,21 @@ public class CourseService {
 	
 	public CourseService() {}
 
+	/**
+	 * Note:
+	 * The precursor course is @OneToOne with fetch = FetchType.LAZY.
+	 * In order to be able to pick up the precursor course @Transactional is being used.
+	 * 
+	 * @return
+	 */
+	@Transactional(value=TxType.REQUIRED)
 	public List<Course> getAllCourses() {
+		logger.info("***** Retrieve the courses from the database: OneToMany taking care of fetching lazy problem.");
 		List<Course> courses = courseRepository.findAll();
 		return courses;
 	}
 	
+	@Transactional
 	public Optional<Course> getCourse(long courseId) {
 		
 		Optional<Course> course = courseRepository.findByCourseId(courseId);
@@ -123,16 +135,20 @@ public class CourseService {
 		return savedCourse.get();
 	}
 	
+	@Transactional
 	public Course updateCourse(Course course) {
+		logger.info("***** Updating course: " + course.toString() );
 		
 		Optional<Course> updateCourse = courseRepository.findByCourseId(course.getCourseId());
 
 		if (!updateCourse.isPresent())
 			throw new CourseNotFoundException("A course with id " + course.getCourseId() + " has not been found.");
 
-		courseRepository.save(updateCourse.get() );
-		updateCourse = courseRepository.findByCourseId(course.getCourseId());
+		Course newCourse = courseRepository.save(course );
+		logger.info("After saving the content of newCourse: " + newCourse.toString() );
 		
+		updateCourse = courseRepository.findByCourseId(course.getCourseId());
+		logger.info("Updated the course: " + updateCourse.get().toString() );
 		return updateCourse.get();
 		
 	}
