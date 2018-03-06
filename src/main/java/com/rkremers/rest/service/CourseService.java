@@ -157,8 +157,6 @@ public class CourseService {
 		
 		Optional<Course> updateCourse = courseRepository.findByCourseId(course.getCourseId());
 		
-		courseRepository.exists(course.getCourseId());
-
 		if (!updateCourse.isPresent()) {
 			throw new CourseNotFoundException("A course with id " + course.getCourseId() + " has not been found.");
 		}
@@ -194,7 +192,7 @@ public class CourseService {
 	 * 
 	 * @param course
 	 */
-	@Transactional
+//	@Transactional
 	public void deleteCourse(Course course) {
 		logger.info("***** Starting method deleteCourse *****\n\n ");
 		logger.info("Entered course: " + course.toString() + "\n" );
@@ -227,16 +225,28 @@ public class CourseService {
 	                   + " is not a precursor course.");
 		}
 		
+		logger.info("Check whether the course has a precursor course.\n" );
 		if (course.getPrecursorCourse() != null) {
 			logger.info("Course " + course.getName() + " has a precursor course. This info will be removed.");
 			course.setPrecursorCourse(null);
 			
 			courseRepository.save(course);
 			
-			course = courseRepository.findOne(course.getCourseId());
-			logger.info("New status of the course: " + course.toString() );
+//			course = courseRepository.findOne(course.getCourseId());
+//			logger.info("New status of the course: " + course.toString() );
+			logger.info("For Course " + course.getName() + " the precursor course has been removed.\n");
+		} else {
+			logger.info( "Course " + course.getName()
+			           + " with courseId " + course.getCourseId()
+                       + " does not have a precursor course.");
 		}
 		
+		/**
+		 *At this point Hibernate will execute the following:
+		 * 1. Check whether the course has a foreign key to a precursor course.
+		 * 2. Check whether the course is present in a StudentCourse entity.
+		 * 3. Delete the Course entity.
+		 */
 		courseRepository.delete(course);
 		logger.info("Course " + course.getName() + " has been removed.");
 	}

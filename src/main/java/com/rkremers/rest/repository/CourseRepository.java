@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.rkremers.rest.model.Course;
 
@@ -14,6 +15,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 	public Optional<Course> findByName(String name);
 	
     public List<Course> findByPrecursorCourse(Course precursorCourse);
+    
+    public Course findRecursorCourse(@Param("courseId") long courseId);
 
 	
 //	public Optional<Course> 

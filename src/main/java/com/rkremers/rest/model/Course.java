@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -20,6 +21,11 @@ import javax.persistence.UniqueConstraint;
 import org.springframework.hateoas.ResourceSupport;
 
 /**
+ * Note:
+ * The NamedQuery Course.findRecursorCourse has been defined because 
+ * there is the FetchType with the precursorCourse is LAZY.
+ * Currently I use @Transactional to prevent exceptions due to LAZY fetching,
+ * but using JPQL may be a more efficient method.
  * 
  * @author rokremer
  *
@@ -27,6 +33,11 @@ import org.springframework.hateoas.ResourceSupport;
 @Entity
 @Table( name="COURSE"
 , uniqueConstraints= @UniqueConstraint(columnNames= {"NAME"} ))
+@NamedQueries({
+	@NamedQuery(name="Course.findRecursorCourse"
+			, query="SELECT c FROM Course c JOIN FETCH c.precursorCourse WHERE c.courseId = :courseId"
+			)
+})
 public class Course extends ResourceSupport implements Serializable {
 
 	private static final long serialVersionUID = -4254287335591834230L;

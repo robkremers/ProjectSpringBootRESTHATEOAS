@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -30,9 +31,11 @@ import org.springframework.hateoas.ResourceSupport;
 @Entity
 @Table( name="STUDY_CONFIGURATION"
 , uniqueConstraints= @UniqueConstraint(columnNames= {"PARAMETER_NAME", "PARAMETER_STR_VALUE"} ))
-@NamedQuery(name="StudyConfiguration.findParameterValue"
+@NamedQueries({
+	@NamedQuery(name="StudyConfiguration.findParameterValue"
 			, query="SELECT sc.parameterStrValue FROM StudyConfiguration sc WHERE sc.parameterName = :parameterName"
 			)
+})
 public class StudyConfiguration extends ResourceSupport implements Serializable {
 
 	private static final long serialVersionUID = -3533545622832386741L;
