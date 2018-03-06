@@ -7,6 +7,7 @@ Todo:
 - Implementation of unit tests.
 - Implementation of the renewed @RestControllers.
 - Implementation of unit tests.
+- Add caching.
 - Add Authorization.
 - Add Actuator.
 - Finish documentation.
