@@ -22,6 +22,7 @@ import com.rkremers.rest.repository.StudentCourseRepository;
 import com.rkremers.rest.repository.StudentRepository;
 import com.rkremers.rest.repository.StudyConfigurationRepository;
 import com.rkremers.rest.service.CourseService;
+import com.rkremers.rest.service.StudentService;
 
 /**
  * Note:
@@ -55,6 +56,9 @@ public class ProjectSpringBootResthateoasApplication implements CommandLineRunne
 	
 	@Autowired
 	private CourseService courseService;
+	
+	@Autowired
+	private StudentService studentService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectSpringBootResthateoasApplication.class, args);
@@ -202,10 +206,40 @@ public class ProjectSpringBootResthateoasApplication implements CommandLineRunne
 		}
 		logger.info("********** Tested update via CourseService: **********\n\n");
 		
-		logger.info("********** Tested deletion of a course: **********\n\n");
+		logger.info("********** Testing deletion of a course: **********\n\n");
 		courseService.deleteCourse(courseTest3);
+//		courseService.deleteCourse(courseTest);
 		logger.info("********** Tested deletion of a course: **********\n\n");
+
+		/*
+		 * Tests regarding the StudentService.
+		 */
+		logger.info("********** Testing StudentService: **********\n\n");
 		
+		logger.info("********** Testing getAllStudents: **********\n");
+		students = studentService.getAllStudents();
+		for (Student student: students) {
+			logger.info(student.toString());
+		}
+		logger.info("********** End Testing getAllStudents: **********\n");
+
+		logger.info("********** Testing getStudent: **********\n");
+		Student testStudent = studentService.getStudent(studentRob.getStudentId());
+		logger.info("testStudent: " + testStudent.toString());
+
+		logger.info("********** End Testing getStudent: **********\n");
+
+		logger.info("********** Testing getAllStudentCourses: **********\n");
+		List<Course> testCourses = studentService.getAllStudentCourses(studentRob);
+		logger.info("Courses found for studentRob: \n");
+		for(Course course: testCourses) {
+			logger.info(course.toString());
+		}
+		logger.info("********** End Testing getAllStudentCourses: **********\n");
+		
+
+		logger.info("********** End Testing StudentService: **********\n\n");
+
 	}
 	
 	/**

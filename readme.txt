@@ -14,6 +14,18 @@ The application will be available on:
 https://github.com/robkremers/ProjectSpringBootRESTHATEOAS
 
 git:
+
+Initial:
+  470  git init
+  471  git pull https://github.com/robkremers/ProjectSpringBootRESTHATEOAS.git
+  473  git status
+  474  git add .
+  480  git commit -m "Initial commit."
+  492  git pull https://github.com/robkremers/ProjectSpringBootRESTHATEOAS.git
+  498  git remote add origin https://github.com/robkremers/ProjectSpringBootRESTHATEOAS.git
+  499  git push -u origin master
+
+Normal:
   501  cd e:
   502  cd JavaDevelopment/
   503  ls -l
@@ -200,6 +212,7 @@ Implementation of the ORM: student <== StudentCourse ==> course.
 This works correctly now.
 
 Test in the H2 database:
+http://localhost:1024/student_db
 	select * from student;
 	select * from course;
 	select * from student_course;
@@ -250,9 +263,29 @@ Possible methods:
 - Update:
 	- (For the moment) it should not be possible to update a course or a student.
 
-*****
-Continue tomorrow at class StudentService.java.
-*****
+
+---------------------------------------------------------------------------------------------------
+2018-03-06:
+
+Lazy fetching:
+Two methods to prevent exceptions due to lazy fetching:
+- @Transactional (Default TxType.REQUIRED) added to the relevant method.
+- The use of JPQL See Pro JPA 2, with adaptation to Spring Boot methodology):
+	If you want to achieve better performace add (e.g.) the following method to your Spring Data JPA repository interface:
+	
+	public interface PersonRepository extends JpaRepository<Person, Long> {
+
+    @Query("SELECT p FROM Person p JOIN FETCH p.roles WHERE p.id = (:id)")
+    public Person findByIdAndFetchRolesEagerly(@Param("id") Long id);
+
+	}
+  - Note that the performance needs to be checked: how many queries are actually being executed?
+  
+VERY IMPORTANT:
+H2 databases do not support deferred checking. So Cascade.ALL, etc. will cause errors because of this.
+For this reason do no add!!
+
+
 ---------------------------------------------------------------------------------------------------
 Sources:
 
@@ -274,6 +307,9 @@ API:
 
 Logging:
 - https://www.quickprogrammingtips.com/spring-boot/using-log4j2-with-spring-boot.html
+- https://lankydanblog.com/2017/08/31/configuring-logback-with-spring-boot/
+- https://logback.qos.ch/manual/layouts.html#conversionWord
+- https://www.logicbig.com/tutorials/spring-framework/spring-boot/logging-console-pattern.html
 	
 JUnit:
 - https://junit.org
@@ -299,4 +335,6 @@ JPA:
 Error Handling:
 - http://www.baeldung.com/exception-handling-for-rest-with-spring?utm_source=email&utm_medium=email&utm_campaign=series1-rest&tl_inbound=1&tl_target_all=1&tl_period_type=3
 
-	
+H2 database:
+- http://h2database.com/html/grammar.html#referential_constraint
+	-  this database does not support deferred checking!!!!!

@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rkremers.rest.exception.CourseAddedToStudentException;
 import com.rkremers.rest.exception.CourseNotFoundException;
+import com.rkremers.rest.exception.PrecursorCourseException;
 import com.rkremers.rest.exception.StudyConfigurationNotFound;
 import com.rkremers.rest.model.Course;
 import com.rkremers.rest.model.Student;
@@ -154,9 +156,17 @@ public class CourseService {
 		logger.info("Entered course: " + course.toString() );
 		
 		Optional<Course> updateCourse = courseRepository.findByCourseId(course.getCourseId());
+		
+		courseRepository.exists(course.getCourseId());
 
-		if (!updateCourse.isPresent())
+		if (!updateCourse.isPresent()) {
 			throw new CourseNotFoundException("A course with id " + course.getCourseId() + " has not been found.");
+		}
+		else {
+			logger.info("Course " + course.getName() 
+            + " with courseId " + course.getCourseId()
+            + " exists.");
+		}
 
 		Course updatedCourse = courseRepository.save(course );
 		logger.info("After saving the content of newCourse: " + updatedCourse.toString() );
@@ -170,12 +180,65 @@ public class CourseService {
 	 * If a course is to be deleted it should not contain references to another entity.
 	 * Caused by: org.h2.jdbc.JdbcSQLException: Referential integrity constraint violation: "FKD8USNCISFGXUHSXP67CIVUB1R: PUBLIC.COURSE FOREIGN KEY(PRECURSOR_COURSE_ID) REFERENCES PUBLIC.COURSE(COURSE_ID) (4)"; SQL statement:
 	 *
-	 * Continue here tomorrow.
+	 * Before possibly deleting check in the following order:
+	 * 1. If the course is present in an entity of StudentCourse the course should never be deleted.
+	 *   (if only for historic reasons).
+	 * 2. Check whether the course is a precursor Course. If this is the case the course should not be deleted.
+	 * 3. If the course has a precursor course this should be put to null.
+	 * 
+	 * After this the course can be deleted.
+	 * 
+	 * Note:
+	 * For this test an H2 database is being used.
+	 * An H2 database does not support deferred checking!!
 	 * 
 	 * @param course
 	 */
+	@Transactional
 	public void deleteCourse(Course course) {
+		logger.info("***** Starting method deleteCourse *****\n\n ");
+		logger.info("Entered course: " + course.toString() + "\n" );
+		
+		logger.info("Check whether the course is being followed / has been followed by students.\n" );
+		List<StudentCourse> studentCourses = studentCourseRepository.findByCourse(course);
+		if ( studentCourses.size() > 0)
+			throw new CourseAddedToStudentException( "Course " + course.getName() 
+			                                       + " with courseId " + course.getCourseId()
+			                                       + " has been handed out to students and therefore can not be deleted."
+			                                       );
+		else {
+			logger.info( "Course " + course.getName() 
+			           + " with courseId " + course.getCourseId()
+			           + " has not been handed out to students.\n");
+		}
+		
+		logger.info("Check whether the course is a precursor course.\n" );
+		List<Course> courses = courseRepository.findByPrecursorCourse(course);
+		if (courses.size() > 0) {
+			logger.info("Course " + course.getName() + " is a precursor course and therefore can not be deleted.");
+			throw new PrecursorCourseException( "Course " + course.getName() 
+                                              + " with courseId " + course.getCourseId()
+                                              + " is a precursor course and therefore can not be deleted."
+                                              );
+		}		
+		else {
+			logger.info( "Course " + course.getName()
+					   + " with courseId " + course.getCourseId()
+	                   + " is not a precursor course.");
+		}
+		
+		if (course.getPrecursorCourse() != null) {
+			logger.info("Course " + course.getName() + " has a precursor course. This info will be removed.");
+			course.setPrecursorCourse(null);
+			
+			courseRepository.save(course);
+			
+			course = courseRepository.findOne(course.getCourseId());
+			logger.info("New status of the course: " + course.toString() );
+		}
+		
 		courseRepository.delete(course);
+		logger.info("Course " + course.getName() + " has been removed.");
 	}
 	
 }

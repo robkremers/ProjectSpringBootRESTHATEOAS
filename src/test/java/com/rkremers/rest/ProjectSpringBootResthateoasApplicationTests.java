@@ -43,16 +43,16 @@ public class ProjectSpringBootResthateoasApplicationTests {
 		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 1.");
 	}
 	
-	@Test
-	public void testMethod2() {
-		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 2.");
-	}	
-	
-	@Ignore
-	@Test
-	public void testMethod3() {
-		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 3.");
-	}
+//	@Test
+//	public void testMethod2() {
+//		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 2.");
+//	}	
+//	
+//	@Ignore
+//	@Test
+//	public void testMethod3() {
+//		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 3.");
+//	}
 	
 	/**
 	 * Note:
@@ -62,11 +62,11 @@ public class ProjectSpringBootResthateoasApplicationTests {
 	 * Ensure that in case of testing on e.g. a custom Exception the logging in advance is clear on what will be tested.
 	 * 
 	 */
-	@Test(expected=ArithmeticException.class)
-	public void testMethod4() {
-		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 4: Check on ArithmeticException.");
-		int result = 1 / 0;
-		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 4: Check on ArithmeticException finished.");
-		
-	}	
+//	@Test(expected=ArithmeticException.class)
+//	public void testMethod4() {
+//		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 4: Check on ArithmeticException.");
+//		int result = 1 / 0;
+//		LOG.info("ProjectSpringBootResthateoasApplicationTests: Test case 4: Check on ArithmeticException finished.");
+//		
+//	}	
 }

@@ -53,7 +53,7 @@ public class Course extends ResourceSupport implements Serializable {
 	*/
 	@OneToOne( optional = true
 			 , orphanRemoval = true
-			 , cascade = CascadeType.ALL
+//			 , cascade = CascadeType.ALL
 			 , fetch = FetchType.LAZY
 			 )
 	// I did not want to use the standard name PRECURSOR_COURSE_COURSE_ID
