@@ -34,8 +34,16 @@ import org.springframework.hateoas.ResourceSupport;
 @Table( name="COURSE"
 , uniqueConstraints= @UniqueConstraint(columnNames= {"NAME"} ))
 @NamedQueries({
-	@NamedQuery(name="Course.findRecursorCourse"
-			, query="SELECT c FROM Course c JOIN FETCH c.precursorCourse WHERE c.courseId = :courseId"
+	/**
+	 * In this case:
+	 * - A precursor course is set to be fetched lazily: use JOIN FETCH.
+	 * - A precursor course is optional                : use LEFT.
+	 * 
+	 * @author rokremer
+	 *
+	 */
+	@NamedQuery(name="Course.findPrecursorCourse"
+			, query="SELECT c FROM Course c LEFT JOIN FETCH c.precursorCourse WHERE c.courseId = :courseId"
 			)
 })
 public class Course extends ResourceSupport implements Serializable {

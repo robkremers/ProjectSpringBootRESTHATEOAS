@@ -64,26 +64,32 @@ public class CourseService {
 	/**
 	 * Note:
 	 * The precursor course is @OneToOne with fetch = FetchType.LAZY.
-	 * In order to be able to pick up the precursor course @Transactional is being used.
+	 * In this situation:
+	 * - One cursor is used.
+	 * - Also the lazily fetched precursorCourse is fetched.
 	 * 
 	 * @return
 	 */
-	@Transactional(value=TxType.REQUIRED)
 	public List<Course> getAllCourses() {
 		logger.info("***** Retrieve the courses from the database: OneToMany taking care of fetching lazy problem.");
 		List<Course> courses = courseRepository.findAll();
 		return courses;
 	}
 	
-	@Transactional
 	public Optional<Course> getCourse(long courseId) {
 		
-		Optional<Course> course = courseRepository.findByCourseId(courseId);
-		if (!course.isPresent() ) {
-			throw new CourseNotFoundException("A course with id " + courseId + " has not been found.");
-		}
+//		Optional<Course> course = courseRepository.findByCourseId(courseId);
 		
-		return course;
+		Optional<Course> course = courseRepository.findPrecursorCourse(courseId);
+		
+		if (!course.isPresent() ) {
+			logger.info("***** A course with id " + courseId + " has not been found. *****\n");
+			throw new CourseNotFoundException("A course with id " + courseId + " has not been found.");
+		} else {
+			logger.info("***** A course with id " + courseId + " has been found. *****\n");
+			return course;
+		}
+			
 	}
 	
 	/**
@@ -96,14 +102,23 @@ public class CourseService {
 	 * @return
 	 */
 	public List<Student> getAllCourseStudents(Course course) {
-		List<StudentCourse> studentCourses = studentCourseRepository.findByCourse(course);
-		List<Student> students = new ArrayList<Student>();
-		for (StudentCourse studentCourse : studentCourses) {
-			if (studentCourse.getStudent() != null) {
-				students.add(studentCourse.getStudent());
-			}
-		}
-		return students;
+		
+		/**
+		 * This method works, but it is very inefficient. Internally the following is done by Spring Boot:
+		 * - One query for determining whether the course exists in table COURSE.
+		 * - For each student a separate query is executed! This will be very costly in case of a large university...
+		 */
+//		List<StudentCourse> studentCourses = studentCourseRepository.findByCourse(course);
+//		List<Student> students = new ArrayList<Student>();
+//		for (StudentCourse studentCourse : studentCourses) {
+//			if (studentCourse.getStudent() != null) {
+//				students.add(studentCourse.getStudent());
+//			}
+//		}
+//		return students;
+		
+		List<Student> students2 = studentCourseRepository.findStudents(course.getCourseId());
+		return students2;
 	}
 	
 	/**

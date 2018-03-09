@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,6 +35,25 @@ import org.springframework.hateoas.ResourceSupport;
  */
 @Entity
 @Table(name="STUDENT_COURSE")
+@NamedQueries({
+	/**
+	 * In this case:
+	 * - A precursor course is set to be fetched lazily: use JOIN FETCH.
+	 * - A precursor course is optional                : use LEFT.
+	 * 
+	 * @author rokremer
+	 *
+	 */
+	@NamedQuery(name="StudentCourse.findStudents"
+			, query="SELECT sc.student FROM StudentCourse sc JOIN sc.course JOIN sc.student c WHERE sc.course.courseId = :courseId"
+			),
+	@NamedQuery(name="StudentCourse.findAllStudents"
+	, query="SELECT sc.student FROM StudentCourse sc JOIN sc.student"
+	),
+	@NamedQuery(name="StudentCourse.findStudentCourses"
+	, query="SELECT sc FROM StudentCourse sc JOIN sc.course c WHERE sc.course.courseId = :courseId"
+	)	
+})
 public class StudentCourse extends ResourceSupport implements Serializable {
 
 	private static final long serialVersionUID = -4221517579194514405L;
