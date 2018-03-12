@@ -78,9 +78,7 @@ public class CourseService {
 	
 	public Optional<Course> getCourse(long courseId) {
 		
-//		Optional<Course> course = courseRepository.findByCourseId(courseId);
-		
-		Optional<Course> course = courseRepository.findPrecursorCourse(courseId);
+		Optional<Course> course = courseRepository.findCourseWithPossiblePrecursor(courseId);
 		
 		if (!course.isPresent() ) {
 			logger.info("***** A course with id " + courseId + " has not been found. *****\n");
@@ -88,8 +86,7 @@ public class CourseService {
 		} else {
 			logger.info("***** A course with id " + courseId + " has been found. *****\n");
 			return course;
-		}
-			
+		}	
 	}
 	
 	/**
@@ -117,8 +114,8 @@ public class CourseService {
 //		}
 //		return students;
 		
-		List<Student> students2 = studentCourseRepository.findStudents(course.getCourseId());
-		return students2;
+		List<Student> students = studentCourseRepository.findStudents(course.getCourseId());
+		return students;
 	}
 	
 	/**
@@ -144,6 +141,15 @@ public class CourseService {
 		
 		if (course.getMinimumScore() == 0.0F) {
 			course.setMinimumScore(doubleStandardPassValue);
+			logger.info( "For course " + course.getName() 
+			           + " with id " + course.getCourseId()
+			           + " the minimum score " + doubleStandardPassValue
+			           + " for passing the course has been set.");
+		} else {
+			logger.info( "For course " + course.getName() 
+	                   + " with id " + course.getCourseId()
+	                   + " the minimum score is " + course.getMinimumScore()
+	                   + ".");
 		}
 
 		courseRepository.save(course);

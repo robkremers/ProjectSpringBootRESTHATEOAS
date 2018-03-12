@@ -16,10 +16,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 	
     public List<Course> findByPrecursorCourse(Course precursorCourse);
     
-    public Optional<Course> findPrecursorCourse(@Param("courseId") long courseId);
-
-	
-//	public Optional<Course> 
+    public Optional<Course> findCourseWithPossiblePrecursor(@Param("courseId") long courseId);
 
 
 }

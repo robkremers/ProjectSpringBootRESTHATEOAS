@@ -42,7 +42,7 @@ import org.springframework.hateoas.ResourceSupport;
 	 * @author rokremer
 	 *
 	 */
-	@NamedQuery(name="Course.findPrecursorCourse"
+	@NamedQuery(name="Course.findCourseWithPossiblePrecursor"
 			, query="SELECT c FROM Course c LEFT JOIN FETCH c.precursorCourse WHERE c.courseId = :courseId"
 			)
 })

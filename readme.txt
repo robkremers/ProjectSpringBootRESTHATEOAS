@@ -285,6 +285,15 @@ VERY IMPORTANT:
 H2 databases do not support deferred checking. So Cascade.ALL, etc. will cause errors because of this.
 For this reason do no add!!
 
+---------------------------------------------------------------------------------------------------
+2018-03-12:
+
+Tested CourseService.
+Testing StudentService: everything in ProjectSpringBootResthateoasApplication.java
+works as intended. Finish testing the remaining methods of StudentService.
+
+After this: start upgrading the RestControllers for Student and Course.
+
 
 ---------------------------------------------------------------------------------------------------
 Sources:
